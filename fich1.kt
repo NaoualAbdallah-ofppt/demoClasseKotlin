@@ -1,22 +1,26 @@
-
+import kotlin.math.PI
 fun main()
 {
 val P:Point = Point(3,5)
-val F1:Forme=Forme()
-F1.couleur="rouge"
-println(F1.couleur)
-val F2:Forme=Forme(F1)
-println(F2.couleur)
+println(P.toString())
+//affichera Point(x=3, y=5) si la classe est déclarée avec data 
+//affichera Point@... si la classe n'est pas data
 val C:Cercle=Cercle("vert")
 println(C.afficher())
 val C2:Cercle=Cercle("bleu",70f)
 println(C2.afficher())
 val C3:Cercle=Cercle("rose",50f,P)
 println(C3.afficher())
+println(C3.surface())
+
 }
 
 class Point (var x:Int,var y:Int)
-open class Forme() 
+//La définition d'une data class permet au compilateur de générer
+//les méthodes utilitaires telles que toString(), copy(), hashCode()
+// et equals() en utilisant les attributs indiqués dans le constructeur
+//primaire
+abstract class Forme() 
 //un constructeur primaine sans paramètres
 {   var couleur:String
     init{couleur="blanc"}
@@ -26,6 +30,7 @@ open class Forme()
     constructor(forme:Forme):this()
     //Appel du constructeur primaire obligatoire s'il existe
     {this.couleur=forme.couleur}
+abstract fun surface():Float
 }
 class Cercle (couleur:String):Forme(couleur)
 {var rayon :Float
@@ -45,7 +50,10 @@ this.rayon=rayon
 this.centre=centre
     }
 fun afficher()="Couleur:"+couleur +"/rayon:"+rayon+"/centre x:"+centre.x + "/centre y:"+centre.y
-
+override fun surface()=(PI*rayon*rayon).toString().toFloat()
+override fun toString():String="Cercle de centre (" + centre.x+","+centre.y+")"+ " et de rayon :" +rayon
+//il faut rajouter overrides sinon le message d'erreur 'toString' hides
+// member of supertype 'Forme' and needs 'override' modifier va s'afficher
 }
 
 
